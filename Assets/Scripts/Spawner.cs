@@ -6,7 +6,6 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private Enemy _prefab;
-    [SerializeField] private Vector3 _direction;
     [SerializeField] private float _spawnDelay = 2.0f;
     [SerializeField] private int _poolCapacity = 10;
     [SerializeField] private int _poolMaxSize = 20;
@@ -37,7 +36,7 @@ public class Spawner : MonoBehaviour
     {
         Enemy enemy = Instantiate(_prefab);
         enemy.gameObject.SetActive(false);
-        enemy.Initialize(_direction);
+        enemy.Initialize(transform.forward);
         return enemy;
     }
 
