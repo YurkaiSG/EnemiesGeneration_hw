@@ -4,7 +4,7 @@ using UnityEngine.Pool;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private Transform[] _wayPoints;
     [SerializeField] private Enemy _prefab;
     [SerializeField] private float _spawnDelay = 2.0f;
     [SerializeField] private int _poolCapacity = 10;
@@ -13,9 +13,9 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        if (_spawnPoints.Length == 0)
+        if (_wayPoints.Length == 0)
         {
-            Debug.LogError($"No spawnpoints assigned. Object name: {gameObject.name}.");
+            Debug.LogError($"No waypoints assigned. Object name: {gameObject.name}.");
             return;
         }
 
@@ -36,15 +36,13 @@ public class Spawner : MonoBehaviour
     {
         Enemy enemy = Instantiate(_prefab);
         enemy.gameObject.SetActive(false);
-        enemy.Initialize(transform.forward);
+        enemy.Initialize(_wayPoints);
         return enemy;
     }
 
     private void ActionOnGet(Enemy enemy)
     {
-        Transform spawnPoint = GetRandomSpawnPoint();
-        enemy.transform.position = spawnPoint.transform.position;
-        enemy.transform.rotation = spawnPoint.transform.rotation;
+        enemy.transform.SetPositionAndRotation(transform.position, transform.rotation);
         enemy.Destroyed += ReleaseOnTrigger;
         enemy.gameObject.SetActive(true);
     }
@@ -70,10 +68,5 @@ public class Spawner : MonoBehaviour
             _pool.Get();
             yield return wait;
         }
-    }
-
-    private Transform GetRandomSpawnPoint()
-    {
-        return _spawnPoints[Random.Range(0, _spawnPoints.Length)];
     }
 }

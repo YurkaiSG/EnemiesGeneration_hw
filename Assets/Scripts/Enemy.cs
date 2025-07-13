@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    private Vector3 _direction;
+    private Transform[] _waypoints;
+    private int _currentWaypointIndex = 0;
 
     public event Action<Enemy> Destroyed;
     public Rigidbody Rigidbody { get; private set; }
@@ -13,12 +15,29 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody>();
-        _direction = new Vector3();
+    }
+
+    private void OnEnable()
+    {
+        _currentWaypointIndex = 0;
     }
 
     private void Update()
     {
-        transform.Translate(_speed * Time.deltaTime * _direction);
+        Move();
+    }
+
+    private void Move()
+    {
+        if (_currentWaypointIndex < _waypoints.Length)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _waypoints[_currentWaypointIndex].position, _speed * Time.deltaTime);
+
+            if (transform.position == _waypoints[_currentWaypointIndex].position)
+            {
+                _currentWaypointIndex++;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,8 +45,8 @@ public class Enemy : MonoBehaviour
         Destroyed?.Invoke(this);
     }
 
-    public void Initialize(Vector3 direction)
+    public void Initialize(Transform[] waypoints)
     {
-        _direction = direction;
+        _waypoints = waypoints;
     }
 }
