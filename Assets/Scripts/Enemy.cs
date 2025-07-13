@@ -4,16 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Vector3 _direction;
     [SerializeField] private float _speed;
-    private Rigidbody _rigidbody;
+    private Vector3 _direction;
 
     public event Action<Enemy> Destroyed;
-    public Rigidbody Rigidbody => _rigidbody;
+    public Rigidbody Rigidbody { get; private set; }
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        Rigidbody = GetComponent<Rigidbody>();
+        _direction = new Vector3();
     }
 
     private void Update()
@@ -24,5 +24,10 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Destroyed?.Invoke(this);
+    }
+
+    public void Initialize(Vector3 direction)
+    {
+        _direction = direction;
     }
 }

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnPoints: []
   _prefab: {fileID: 0}
+  _direction: {x: 0, y: 0, z: 0}
   _spawnDelay: 2
   _poolCapacity: 30
   _poolMaxSize: 100
