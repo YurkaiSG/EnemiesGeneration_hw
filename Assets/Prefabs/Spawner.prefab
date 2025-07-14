@@ -44,9 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2482eb9519491ab449f4ca4882efe535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnPoints: []
+  _target: {fileID: 0}
   _prefab: {fileID: 0}
-  _direction: {x: 0, y: 0, z: 0}
   _spawnDelay: 2
-  _poolCapacity: 30
-  _poolMaxSize: 100
+  _poolCapacity: 5
+  _poolMaxSize: 10

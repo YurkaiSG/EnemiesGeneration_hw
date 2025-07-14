@@ -4,18 +4,24 @@ using UnityEngine.Pool;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Transform[] _wayPoints;
+    [SerializeField] private Transform _target;
     [SerializeField] private Enemy _prefab;
     [SerializeField] private float _spawnDelay = 2.0f;
-    [SerializeField] private int _poolCapacity = 10;
-    [SerializeField] private int _poolMaxSize = 20;
+    [SerializeField] private int _poolCapacity = 5;
+    [SerializeField] private int _poolMaxSize = 10;
     private ObjectPool<Enemy> _pool;
 
     private void Start()
     {
-        if (_wayPoints.Length == 0)
+        if (_target == null)
         {
-            Debug.LogError($"No waypoints assigned. Object name: {gameObject.name}.");
+            Debug.LogError($"No target assigned. Object name: {gameObject.name}.");
+            return;
+        }
+
+        if (_prefab == null)
+        {
+            Debug.LogError($"No enemy prefab assigned. Object name: {gameObject.name}.");
             return;
         }
 
@@ -36,7 +42,7 @@ public class Spawner : MonoBehaviour
     {
         Enemy enemy = Instantiate(_prefab);
         enemy.gameObject.SetActive(false);
-        enemy.Initialize(_wayPoints);
+        enemy.Initialize(_target);
         return enemy;
     }
 
